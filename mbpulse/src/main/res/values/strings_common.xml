@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Library strings. Every participant-facing text of the mbPulse library is a
+  resource prefixed "mbpulse_". A host app changes wording by defining a string
+  with the same name in its own res/values/, and translates by adding
+  res/values-<lang>/ files (host or library).
+-->
+<resources>
+    <string name="mbpulse_cancel">Cancel</string>
+    <string name="mbpulse_retry">Retry</string>
+    <string name="mbpulse_try_again">Try again</string>
+    <string name="mbpulse_close">Close</string>
+    <string name="mbpulse_done">Done</string>
+    <string name="mbpulse_ok">OK</string>
+    <string name="mbpulse_back">Back</string>
+    <string name="mbpulse_continue">Continue</string>
+    <string name="mbpulse_not_now">Not now</string>
+    <string name="mbpulse_more_options">More options</string>
+    <string name="mbpulse_refresh">Refresh</string>
+
+    <!-- Relative times -->
+    <string name="mbpulse_time_just_now">just now</string>
+    <plurals name="mbpulse_time_minutes_ago">
+        <item quantity="one">%d min ago</item>
+        <item quantity="other">%d min ago</item>
+    </plurals>
+    <plurals name="mbpulse_time_hours_ago">
+        <item quantity="one">%d h ago</item>
+        <item quantity="other">%d h ago</item>
+    </plurals>
+    <string name="mbpulse_time_yesterday">yesterday %1$s</string>
+</resources>

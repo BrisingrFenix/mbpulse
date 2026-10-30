@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Loading screen and errors -->
+    <string name="mbpulse_loading_failed">Could not load study configuration.</string>
+    <string name="mbpulse_loading_failed_detail">The study could not be loaded. Check your internet connection and try again.</string>
+    <string name="mbpulse_error_with_detail">%1$s\n\n(%2$s)</string>
+
+    <!-- App ↔ backend version check (BackendCompatibility) -->
+    <string name="mbpulse_backend_incomplete">The study\'s server is not fully set up (missing: %1$s). Please contact the study team.</string>
+    <string name="mbpulse_backend_too_old">The study\'s server is older than this app (server version %1$d, app needs %2$d). Please contact the study team — the server needs updating.</string>
+    <string name="mbpulse_app_too_old">This version of the app is too old for the study\'s server (app version %1$d, server needs %2$d or newer). Please update the app.</string>
+
+    <!-- Study definition checks -->
+    <string name="mbpulse_study_missing">This study no longer exists on the server.</string>
+    <string name="mbpulse_study_untracked">This study\'s definition has no record on the server yet, so consent cannot be recorded against it. Please contact the study team (the backend needs updating).</string>
+    <string name="mbpulse_study_unverified">This study\'s definition could not be verified (%1$s). It may have been changed by someone other than the research team, so no data will be collected. Please contact the study team.</string>
+    <string name="mbpulse_study_rollback">The server returned an older version of this study\'s definition than this device already accepted, so it may have been tampered with. No data will be collected. Please contact the study team.</string>
+    <string name="mbpulse_study_unnamed">Unnamed study</string>
+</resources>

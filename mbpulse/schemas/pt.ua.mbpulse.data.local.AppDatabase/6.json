@@ -1,0 +1,209 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 6,
+    "identityHash": "1ab5b36c73e9197f3d4c3de6a95a3062",
+    "entities": [
+      {
+        "tableName": "encrypted_records",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `participantPseudoId` TEXT NOT NULL, `studyId` TEXT NOT NULL, `epochStartMs` INTEGER NOT NULL, `schemaName` TEXT NOT NULL, `ciphertextHex` TEXT NOT NULL, `participantWrappedDekHex` TEXT NOT NULL, `piWrappedDekHex` TEXT NOT NULL, `syncState` TEXT NOT NULL, `createdAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "participantPseudoId",
+            "columnName": "participantPseudoId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "studyId",
+            "columnName": "studyId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epochStartMs",
+            "columnName": "epochStartMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schemaName",
+            "columnName": "schemaName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ciphertextHex",
+            "columnName": "ciphertextHex",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "participantWrappedDekHex",
+            "columnName": "participantWrappedDekHex",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "piWrappedDekHex",
+            "columnName": "piWrappedDekHex",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "syncState",
+            "columnName": "syncState",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_encrypted_records_participantPseudoId_epochStartMs_schemaName",
+            "unique": true,
+            "columnNames": [
+              "participantPseudoId",
+              "epochStartMs",
+              "schemaName"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_encrypted_records_participantPseudoId_epochStartMs_schemaName` ON `${TABLE_NAME}` (`participantPseudoId`, `epochStartMs`, `schemaName`)"
+          }
+        ]
+      },
+      {
+        "tableName": "display_epochs",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`schemaName` TEXT NOT NULL, `epochStartMs` INTEGER NOT NULL, `displayValue` TEXT NOT NULL, `unit` TEXT NOT NULL, PRIMARY KEY(`schemaName`))",
+        "fields": [
+          {
+            "fieldPath": "schemaName",
+            "columnName": "schemaName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epochStartMs",
+            "columnName": "epochStartMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "displayValue",
+            "columnName": "displayValue",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "schemaName"
+          ]
+        }
+      },
+      {
+        "tableName": "epoch_history",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `schemaName` TEXT NOT NULL, `epochStartMs` INTEGER NOT NULL, `numericValue` REAL NOT NULL, `displayValue` TEXT NOT NULL, `unit` TEXT NOT NULL, `kind` TEXT, `category` TEXT, `seriesJson` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "schemaName",
+            "columnName": "schemaName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "epochStartMs",
+            "columnName": "epochStartMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "numericValue",
+            "columnName": "numericValue",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "displayValue",
+            "columnName": "displayValue",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "kind",
+            "columnName": "kind",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "seriesJson",
+            "columnName": "seriesJson",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_epoch_history_schemaName_epochStartMs",
+            "unique": false,
+            "columnNames": [
+              "schemaName",
+              "epochStartMs"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_epoch_history_schemaName_epochStartMs` ON `${TABLE_NAME}` (`schemaName`, `epochStartMs`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1ab5b36c73e9197f3d4c3de6a95a3062')"
+    ]
+  }
+}

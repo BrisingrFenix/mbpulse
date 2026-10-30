@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Device selection (MbPulseConfig.deviceSelection) -->
+    <string name="mbpulse_device_title">Your device</string>
+    <string name="mbpulse_device_intro">This study records data from a wearable device. Switch the device on, keep it close to your phone, then choose it from the list.</string>
+    <string name="mbpulse_device_current">Current device: %1$s</string>
+    <string name="mbpulse_device_current_none">No device chosen yet</string>
+    <string name="mbpulse_device_unnamed">Unnamed device</string>
+    <string name="mbpulse_device_choose">Choose my device</string>
+    <string name="mbpulse_device_choose_other">Choose another device</string>
+    <string name="mbpulse_device_opening">Opening the device list…</string>
+    <string name="mbpulse_device_forget">Forget this device</string>
+    <string name="mbpulse_device_not_now">Not now</string>
+    <string name="mbpulse_device_done">Done</string>
+    <string name="mbpulse_device_back">Back</string>
+
+    <string name="mbpulse_device_saved">Device saved. Recording starts as soon as it is connected.</string>
+    <string name="mbpulse_device_cancelled">No device was chosen.</string>
+    <string name="mbpulse_device_failed">No device could be found. Check that it is switched on and nearby, then try again.</string>
+    <string name="mbpulse_device_bluetooth_off">Bluetooth is off. Turn it on, then try again.</string>
+    <string name="mbpulse_device_permission_denied">The app needs permission to connect to nearby devices to record from your wearable.</string>
+    <string name="mbpulse_device_not_supported">This phone cannot connect to the study\'s device.</string>
+    <string name="mbpulse_device_forgotten">Device forgotten.</string>
+
+    <!-- Home screen card -->
+    <string name="mbpulse_device_card_title">Device</string>
+    <string name="mbpulse_device_card_none">None chosen. Tap to choose your device.</string>
+    <string name="mbpulse_device_card_change">Change</string>
+
+    <!-- Connection status (card and device screen); joined with " · " -->
+    <string name="mbpulse_device_status_connected">Connected</string>
+    <string name="mbpulse_device_status_connecting">Connecting…</string>
+    <string name="mbpulse_device_status_disconnected">Not connected</string>
+    <string name="mbpulse_device_status_disconnected_since">Not connected since %1$s</string>
+    <string name="mbpulse_device_status_receiving">Receiving data</string>
+    <string name="mbpulse_device_status_no_data">No data received yet</string>
+    <string name="mbpulse_device_last_data">last data %1$s</string>
+</resources>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PI Data Retrieval</title>
+  <!-- Stand-alone: no code from any other server runs next to the PI private
+       key. Scripts only from this folder (vendor/ = pinned copies, see
+       vendor/README.md); network only to the backend over HTTPS. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src https:; base-uri 'none'; form-action 'none'">
+  <link rel="stylesheet" href="styles.css">
+  <script src="vendor/chart-4.4.1.umd.js"></script>
+  <script src="vendor/hammer-2.0.8.min.js"></script>
+  <script src="vendor/chartjs-plugin-zoom-2.0.1.min.js"></script>
+</head>
+<body>
+<main>
+
+<h1>PI Data Retrieval</h1>
+<p class="subtitle">Decrypt and export your study's data in this browser with your private key.
+  Every export is logged and participants are notified in the app.</p>
+
+<!-- 1 · Connection -->
+<section class="card">
+  <h2>1 · Connection</h2>
+  <div class="grid2">
+    <label>Supabase URL <input type="text" id="supabaseUrl" placeholder="https://xxxx.supabase.co"></label>
+    <label>Supabase anon key <input type="password" id="supabaseKey" placeholder="eyJ…"></label>
+  </div>
+  <div class="grid2">
+    <label>PI staff account email <input type="email" id="piEmail" placeholder="you@university.edu" autocomplete="username"></label>
+    <label>Password <input type="password" id="piPassword" placeholder="••••••••" autocomplete="current-password"></label>
+  </div>
+  <p class="hint">Exports require a staff account linked to the study (set by the setup wizard).</p>
+  <button onclick="loadStudies()">Load studies</button>
+</section>
+
+<!-- 2 · Study -->
+<section class="card hidden" id="studyCard">
+  <h2>2 · Select study</h2>
+  <div id="studyList"></div>
+</section>
+
+<!-- 3 · Private key -->
+<section class="card">
+  <h2>3 · PI private key</h2>
+  <p class="hint">Stays in this page — used only to decrypt in your browser.</p>
+  <label class="file-label" for="pemFile">Load .pem file</label>
+  <input type="file" id="pemFile" accept=".pem,.key">
+  <textarea id="pemKey" placeholder="-----BEGIN PRIVATE KEY-----&#10;…&#10;-----END PRIVATE KEY-----"></textarea>
+</section>
+
+<!-- 4 · Fetch -->
+<section class="card">
+  <h2>4 · Fetch &amp; decrypt</h2>
+  <div id="status" class="status"></div>
+  <div id="progress" class="progress hidden"><div></div></div>
+  <div class="row">
+    <button id="fetchBtn" onclick="fetchAndDecrypt()">Fetch &amp; decrypt records</button>
+    <button class="btn-secondary" id="exportCsvBtn" onclick="exportCsv()" disabled>Export CSV</button>
+    <button class="btn-secondary" id="exportJsonBtn" onclick="exportJson()" disabled>Export JSON</button>
+  </div>
+</section>
+
+<!-- Overview -->
+<section class="card hidden" id="statsContainer">
+  <h2 id="studyTitle">Overview</h2>
+  <div class="stats">
+    <div class="stat"><div class="stat-label">Records</div><div class="stat-value" id="statTotal">—</div></div>
+    <div class="stat"><div class="stat-label">Decrypted</div><div class="stat-value" id="statDecrypted">—</div></div>
+    <div class="stat"><div class="stat-label">Failed</div><div class="stat-value" id="statFailed">—</div></div>
+    <div class="stat"><div class="stat-label">Participants</div><div class="stat-value" id="statParticipants">—</div></div>
+    <div class="stat"><div class="stat-label">Schemas</div><div class="stat-value" id="statSchemas">—</div></div>
+    <div class="stat wide"><div class="stat-label">Period</div><div class="stat-value small" id="statSpan">—</div></div>
+  </div>
+</section>
+
+<!-- Activity -->
+<section class="card hidden" id="heatmapContainer">
+  <div class="card-head">
+    <h2>Data submission activity</h2>
+    <select id="heatParticipant"></select>
+  </div>
+  <div id="heatmapWrap"></div>
+  <div class="heat-legend">Less
+    <span style="background:#161b22"></span><span style="background:#0e4429"></span><span style="background:#006d32"></span>
+    <span style="background:#26a641"></span><span style="background:#39d353"></span> More
+  </div>
+</section>
+
+<!-- Charts -->
+<section class="card hidden" id="chartsContainer">
+  <div class="card-head">
+    <h2>Signals</h2>
+    <div class="row">
+      <select id="chartParticipant" title="Participant"></select>
+      <select id="chartRange" title="Time range">
+        <option value="all">Whole period</option>
+        <option value="24">Last 24 hours</option>
+        <option value="168">Last 7 days</option>
+        <option value="720">Last 30 days</option>
+      </select>
+      <select id="chartRes" title="Resolution">
+        <option value="auto">Averaged (readable)</option>
+        <option value="raw">Raw points</option>
+      </select>
+    </div>
+  </div>
+  <p class="hint">Long periods are averaged into time bins (line = mean, band = min–max); drag across a chart
+    to zoom in — the detail follows down to the raw points. Shift-drag pans; click a legend entry to hide a series.</p>
+  <div class="chart-grid" id="chartGrid"></div>
+</section>
+
+<!-- Records -->
+<section class="card hidden" id="tableContainer">
+  <div class="card-head">
+    <h2>Records</h2>
+    <div class="row">
+      <select id="tableParticipant"></select>
+      <select id="tableSchema"></select>
+    </div>
+  </div>
+  <div class="overflow">
+    <table>
+      <thead><tr><th>Participant</th><th>Schema</th><th>Time</th><th>Values</th></tr></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+  <div class="pager">
+    <button class="btn-secondary" id="tablePrev">← Previous</button>
+    <span id="tableInfo"></span>
+    <button class="btn-secondary" id="tableNext">Next →</button>
+  </div>
+</section>
+
+</main>
+<script src="app.js"></script>
+</body>
+</html>

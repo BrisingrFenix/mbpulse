@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- TODO(agent): the passive collection mode (StudyConfig.kt collectionMode)
+         needs an Android 14+ prerequisite for its foreground-service type.
+         CHANGE_NETWORK_STATE satisfies PASSIVE_CONNECTED_DEVICE for CSV-replay
+         development. For the real device replace it with what the sensor uses:
+           Bluetooth wearable → BLUETOOTH_CONNECT (+ request it at runtime, then
+                                call PassiveCollection.resume(context))
+           PASSIVE_HEALTH     → BODY_SENSORS / ACTIVITY_RECOGNITION (runtime)
+                                or HIGH_SAMPLING_RATE_SENSORS
+           SESSION mode       → nothing (dataSync has no prerequisite)        -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <!-- TODO(agent): Bluetooth LE wearable (BleSensorSource + MbPulseConfig.deviceSelection):
+         BLUETOOTH_CONNECT is requested by the library's device step and is also the
+         connectedDevice prerequisite. The device chooser (Companion Device Manager)
+         needs no scan/location permission. The two companion permissions let the
+         associated app restart collection from the background. Android 11 and
+         lower have no BLUETOOTH_CONNECT: BluetoothAdapter.isEnabled() (the
+         device step checks it before opening the chooser) and connectGatt need
+         the legacy install-time BLUETOOTH / BLUETOOTH_ADMIN instead (minSdk 26).
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.REQUEST_COMPANION_START_FOREGROUND_SERVICES_FROM_BACKGROUND" />
+    <uses-permission android:name="android.permission.REQUEST_COMPANION_RUN_IN_BACKGROUND" />
+    <uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
+    -->
+
+    <!-- TODO(agent): if you register healthConnectSources in StudyConfig.kt, declare
+         the matching read permission for EACH source here, e.g.:
+    <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
+         and, for the periodic background import (on by default once sources
+         are registered — StudyConfig.kt healthConnectBackgroundImport):
+    <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND" />
+    -->
+
+    <application
+        android:name=".TemplateApp"
+        android:allowBackup="false"
+        android:label="My Study"
+        android:theme="@style/Theme.Study">
+        <!-- TODO(agent): set android:label to the study name; add android:icon
+             once the study has launcher artwork. allowBackup stays false so
+             health data is never cloud-backed-up in plaintext. Keep a
+             NoActionBar theme (res/values/themes.xml) — the Compose screens
+             draw their own top bars. -->
+
+        <!-- WorkManager on-demand init: TemplateApp implements
+             Configuration.Provider, so the default initializer must be removed. -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+        </provider>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Health Connect requires a privacy-rationale entry point in any app
+             that requests health permissions; without it, permission requests
+             silently fail on Android 14+. Keep even if HC import is disabled —
+             it is inert without the permissions above. -->
+        <activity
+            android:name=".PermissionsRationaleActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
+        </activity>
+        <activity-alias
+            android:name="ViewPermissionUsageActivity"
+            android:exported="true"
+            android:targetActivity=".PermissionsRationaleActivity"
+            android:permission="android.permission.START_VIEW_PERMISSION_USAGE">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW_PERMISSION_USAGE" />
+                <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
+            </intent-filter>
+        </activity-alias>
+    </application>
+
+</manifest>

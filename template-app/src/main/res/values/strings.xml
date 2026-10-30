@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Symptom log host screen (SymptomLog.kt).
+         Host-app strings: your own prefix, never mbpulse_ (those override the library). -->
+    <string name="symptom_title">Log a symptom</string>
+    <string name="symptom_back">Back</string>
+    <string name="symptom_card">Tap when a symptom starts</string>
+    <string name="symptom_card_not_consented">Not part of what you agreed to share</string>
+    <string name="symptom_q_which">What are you feeling right now?</string>
+    <string-array name="symptom_names">
+        <!-- Same order as SymptomLog.SYMPTOMS (stored codes stay in English). -->
+        <item>Headache</item>
+        <item>Dizziness</item>
+        <item>Nausea</item>
+        <item>Palpitations</item>
+        <item>Other</item>
+    </string-array>
+    <string name="symptom_q_severity">How strong is it? (1 = mild, 5 = severe — optional)</string>
+    <string name="symptom_notes">Notes (optional)</string>
+    <string name="symptom_submit">Log symptom</string>
+    <string name="symptom_saved">Logged — it is encrypted and will be uploaded.</string>
+    <string name="symptom_failed">It could not be saved. Please try again.</string>
+    <string name="symptom_not_consented">Symptom logging is not part of what you agreed to share in this study, so nothing was saved.</string>
+    <string name="symptom_not_enrolled">Finish joining the study first.</string>
+    <string name="symptom_log_another">Log another</string>
+    <string name="symptom_close">Close</string>
+</resources>

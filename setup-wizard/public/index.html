@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mbPulse Study Setup</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<aside id="sidebar">
+  <h1>Study setup</h1>
+  <nav>
+    <button class="step-link active" data-step="1"><span>1</span> Backend</button>
+    <button class="step-link" data-step="2"><span>2</span> Provision</button>
+    <button class="step-link" data-step="3"><span>3</span> Your study</button>
+    <button class="step-link" data-step="4"><span>4</span> Build the app</button>
+  </nav>
+  <p class="hint" id="repo-root"></p>
+</aside>
+
+<main>
+  <!-- ============================== STEP 1 ============================== -->
+  <section class="step" id="step-1">
+    <h2>1 · Choose your backend</h2>
+    <p>The study needs a Supabase backend (a free Postgres database in the
+       cloud, or one running on your own machine). It only ever stores
+       encrypted data:</p>
+    <figure><img src="img/architecture.svg" alt="Phone encrypts data, Supabase stores ciphertext, the PI decrypts locally"></figure>
+    <p>Pick one:</p>
+
+    <div class="choices">
+      <label class="choice"><input type="radio" name="backend" value="new" checked>
+        <b>New Supabase project</b>
+        <small>First study, hosted in the cloud (free tier is fine).</small></label>
+      <label class="choice"><input type="radio" name="backend" value="existing">
+        <b>Existing mbPulse backend</b>
+        <small>Add another study to a backend already set up with this wizard.</small></label>
+      <label class="choice"><input type="radio" name="backend" value="local">
+        <b>Local instance</b>
+        <small>Runs on this machine (needs Docker + the Supabase CLI).</small></label>
+    </div>
+
+    <div id="backend-guide-new" class="guide">
+      <ol>
+        <li>Go to <a href="https://supabase.com" target="_blank">supabase.com</a>, create an account and a <b>New project</b> (choose any name and a strong database password; pick a region near your participants).
+          <img class="screenshot" src="img/shots/create-project.png"
+               alt="Screenshot: the Supabase New Project form"
+               data-hint="Screenshot of the Supabase 'New project' form (name, database password, region)."></li>
+        <li>When it finishes provisioning: <b>Settings → API</b> — copy the <b>Project URL</b> and the <b>anon / publishable key</b> below.
+          <img class="screenshot" src="img/shots/api-keys.png"
+               alt="Screenshot: Settings → API with the Project URL and anon key highlighted"
+               data-hint="Screenshot of Settings → API — draw arrows/boxes on the Project URL and the anon/publishable key."></li>
+        <li><b>Connect</b> (top bar) → <b>Session pooler</b> — copy the connection string (starts with <code>postgresql://</code>) and put your database password into it.
+          <img class="screenshot" src="img/shots/connect-pooler.png"
+               alt="Screenshot: the Connect dialog with the Session pooler connection string highlighted"
+               data-hint="Screenshot of the Connect dialog — highlight the Session pooler tab and the postgresql:// string."></li>
+      </ol>
+    </div>
+    <div id="backend-guide-existing" class="guide hidden">
+      <p>Enter the same three values used when the backend was first set up.
+         Step 2 will only <b>verify</b> the backend (no reinstallation), and in
+         step 3 your new study is simply added next to the existing ones.</p>
+    </div>
+    <div id="backend-guide-local" class="guide hidden">
+      <ol>
+        <li>Install <a href="https://supabase.com/docs/guides/cli" target="_blank">the Supabase CLI</a> and Docker, then run <code>supabase start</code> in a terminal.</li>
+        <li>URL: <code>http://127.0.0.1:54321</code> · anon key: printed by <code>supabase status</code>.
+          <img class="screenshot" src="img/shots/local-status.png"
+               alt="Screenshot: supabase status output with the anon key highlighted"
+               data-hint="Screenshot of the 'supabase status' terminal output — highlight the anon key line."></li>
+        <li>Connection string: <code>postgresql://postgres:postgres@127.0.0.1:54322/postgres</code></li>
+      </ol>
+    </div>
+
+    <div class="form">
+      <label>Project URL <input id="supabase-url" placeholder="https://abcdefgh.supabase.co"></label>
+      <label>anon / publishable key <input id="anon-key" placeholder="sb_publishable_… or eyJ…"></label>
+      <label>Database connection string
+        <input id="db-url" placeholder="postgresql://postgres.abcdefgh:PASSWORD@aws-0-eu-west-1.pooler.supabase.com:5432/postgres">
+      </label>
+      <div class="row">
+        <button id="btn-test">Test connection</button>
+        <span id="test-result" class="result"></span>
+      </div>
+    </div>
+    <div class="nav"><span></span><button class="next" data-next="2" id="to-2" disabled>Continue →</button></div>
+  </section>
+
+  <!-- ============================== STEP 2 ============================== -->
+  <section class="step hidden" id="step-2">
+    <h2>2 · Provision the backend</h2>
+    <div class="banner only-existing">
+      This backend was set up before — <b>no database installation is needed</b>.
+      Verify it below, then just load the keys (b) and write this app's
+      credentials (c).
+    </div>
+    <figure class="only-new"><img src="img/provision-flow.svg" alt="The SQL files build the backend; two keypairs are generated and split between your machine, the study and the app"></figure>
+
+    <div class="card">
+      <h3>a) Database setup</h3>
+      <p class="only-new">Creates the tables, security policies and functions
+         the app needs. Safe to re-run at any time.</p>
+      <p class="only-existing">The database is already in place. Verify it —
+         and re-run the setup only if something is reported missing (for
+         example after updating this toolkit); it never touches existing data.</p>
+      <div class="row only-existing">
+        <button id="btn-verify-db">Verify backend</button>
+        <span id="verify-db-result" class="result"></span>
+      </div>
+      <div class="row"><button id="btn-provision">Run database setup</button>
+        <span id="provision-result" class="result"></span></div>
+      <ul id="provision-files" class="filelist"></ul>
+    </div>
+
+    <div class="card">
+      <h3>b) Study keys</h3>
+      <p>Two keypairs: the <b>PI key</b> (decrypts study data on your machine —
+         private key never leaves it) and the <b>receipt key</b> (signs deletion
+         receipts). Stored in a folder that is never committed to git —
+         <b>back it up offline</b>.</p>
+      <div class="row"><button id="btn-keys">Generate / load keys</button>
+        <span id="keys-result" class="result"></span></div>
+    </div>
+
+    <div class="card">
+      <h3>c) App credentials</h3>
+      <p>Writes the URL and anon key from step 1 into <code>local.properties</code>,
+         where the app build reads them (they never go into source code).</p>
+      <div class="row"><button id="btn-credentials">Write build config</button>
+        <span id="credentials-result" class="result"></span></div>
+    </div>
+
+    <div class="card">
+      <h3>d) Withdrawal function <span class="badge">in the Supabase dashboard</span></h3>
+      <p class="only-existing">Already deployed during the first setup — just
+         confirm it still responds. The steps reappear if the check fails.</p>
+      <p class="only-new">The signed-deletion function runs on Supabase's
+         servers. Deploy it once from the dashboard — no extra tools needed:</p>
+      <ol class="deploy-steps">
+        <li>Dashboard → <b>Edge Functions</b> (left sidebar) →
+            <b>Deploy a new function</b> → <b>Via Editor</b>.</li>
+        <li>Name it exactly <code>confirm-withdrawal</code>, replace the sample
+            code with the real one
+            <button id="btn-copy-code" class="copy small">Copy function code</button>
+            <span id="copy-code-result" class="result"></span>,
+            then press <b>Deploy</b>.</li>
+        <li>Leave <b>Verify JWT ON</b> (the default).
+            <small>Only a participant's own signed-in session may withdraw; the
+            function also checks the device signature. If you turned it off
+            for an earlier version, switch it back on.</small></li>
+        <li><b>Authentication → Providers → Email</b>: keep it enabled and switch
+            <b>Confirm email → OFF</b>.
+            <small>Participant accounts use generated addresses
+            (<code>…@participants.invalid</code>) that never receive mail; with
+            confirmation on, enrolment cannot sign in.</small></li>
+        <li><b>Edge Functions → Secrets</b> → add a secret
+            <small>(enables the signed "proof of deletion" receipts)</small>:
+          <div class="kv">Name: <code>DELETION_SIGNING_KEY_PKCS8_B64</code></div>
+          <div class="kv">Value:
+            <pre id="secret-value">← generate the keys in box b first</pre>
+            <button class="copy small" data-copy="secret-value">Copy value</button></div></li>
+      </ol>
+      <div class="row">
+        <button id="btn-check-fn">Check deployment</button>
+        <span id="check-fn-result" class="result"></span>
+      </div>
+      <details>
+        <summary>Prefer the CLI?</summary>
+        <pre id="edge-commands">supabase link --project-ref &lt;your-project-ref&gt;
+supabase secrets set DELETION_SIGNING_KEY_PKCS8_B64=&lt;generate keys first&gt;
+supabase functions deploy confirm-withdrawal</pre>
+        <button class="copy" data-copy="edge-commands">Copy commands</button>
+      </details>
+    </div>
+
+    <div class="nav"><button class="back" data-next="1">← Back</button>
+      <button class="next" data-next="3">Continue →</button></div>
+  </section>
+
+  <!-- ============================== STEP 3 ============================== -->
+  <section class="step hidden" id="step-3">
+    <h2>3 · Define your study</h2>
+    <p>This is what participants see and consent to. For each data type, pick
+       the measurement schemas that feed it — that choice also wires the app.</p>
+    <figure><img src="img/consent-preview.svg" alt="How a data type from this form is rendered on the participant's consent screen"></figure>
+
+    <div class="card" id="study-mode-box">
+      <div class="row">
+        <label class="checkline"><input type="radio" name="study-mode" value="new" checked> Create a new study</label>
+        <label class="checkline"><input type="radio" name="study-mode" value="update"> Update an existing study</label>
+      </div>
+      <div id="update-box" class="hidden">
+        <p>Loads a study from the backend into the form below. The update is re-signed and
+           keeps the study's id, so enrolled participants stay enrolled; their app asks them
+           to consent again to any new or changed data type before it is collected.</p>
+        <div class="row">
+          <button id="btn-load-studies" class="secondary">Fetch studies</button>
+          <select id="study-picker"><option value="">— fetch first —</option></select>
+          <button id="btn-load-study" class="secondary" disabled>Load into form</button>
+        </div>
+        <span id="update-info" class="result"></span>
+        <div id="handover-box" class="hidden">
+          <p><b>Investigator handover.</b> This wizard's PI key (backend/keys) is not the study's
+             PI key. To hand the study to a new investigator, prove control of the current one by
+             selecting the <b>current PI's private key</b> (<code>pi_private.pem</code>). It is only
+             used to sign a challenge here and is never stored or uploaded. After the update, new
+             data is encrypted for the new PI key; data collected before stays readable only with
+             the old key.</p>
+          <label>Current PI private key <input type="file" id="old-pi-key" accept=".pem,.key,.txt"></label>
+          <label class="checkline"><input type="checkbox" id="remove-other-staff" checked>
+            Remove the previous investigator's export access (keeps only the PI staff email below)</label>
+        </div>
+        <div class="row">
+          <button id="btn-check-update" class="secondary" disabled>Check update</button>
+          <span id="check-update-result" class="result"></span>
+        </div>
+        <ul id="update-changes"></ul>
+        <div id="lifecycle-box" class="hidden">
+          <p><b>Enrolment and end of study.</b> These take effect at once — no new version or
+             re-consent. <b>Closing enrolment</b> stops new participants from joining; everyone
+             enrolled keeps taking part. <b>Ending the study</b> is permanent: the backend refuses
+             new enrolments, consent and data measured after the end; participants' apps stop
+             collecting, upload what was recorded before, and tell them the study has ended. Their
+             data stays until its retention period ends, or until they withdraw.</p>
+          <div class="row">
+            <button id="btn-toggle-enrolment" class="secondary">Close enrolment</button>
+            <button id="btn-end-study" class="danger">End study…</button>
+            <span id="lifecycle-result" class="result"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form">
+      <div class="grid2">
+        <label>Study name <input id="study-name" placeholder="My Sleep Study"></label>
+        <label>Version <input id="study-version" value="1.0" size="6"></label>
+      </div>
+      <label>Join code <small>(optional — participants must type it to enrol; leave empty for open enrolment —
+        when updating, empty keeps the current code)</small>
+        <input id="join-code" placeholder=""></label>
+    </div>
+
+    <div id="datatypes"></div>
+    <button id="btn-add-type" class="secondary">+ Add data type</button>
+
+    <details class="card"><summary>Preview study.json</summary>
+      <pre id="study-preview"></pre></details>
+
+    <label>PI staff account email
+      <input id="pi-email" placeholder="you@university.edu — a user created under Authentication → Users">
+      <small>Linked to the study as research staff: only this account can export
+      its data (in the PI tool). Leave empty to link it later.</small>
+    </label>
+    <div class="row">
+      <button id="btn-seed">Create study on the backend</button>
+      <span id="seed-result" class="result"></span>
+    </div>
+
+    <div class="card" id="questionnaires-box">
+      <h3>Questionnaires <small>(optional)</small></h3>
+      <p>Questions participants answer in the app. The app draws the form from what you publish here,
+         so a new version reaches every phone without an app update — signed with your study-signing
+         key, so nobody else can change the questions.</p>
+      <p>Each questionnaire belongs to one <b>data type</b> of the study, and that is what participants
+         consent to: its name, description, retention and — through <i>Sampling</i> — how often
+         (e.g. 72000 s ≈ once a day). Publishing a new version of the questions therefore does
+         <b>not</b> ask participants to consent again. Keep the questions within what the data type
+         describes and check with your ethics committee whether a change needs approval; a change that
+         needs new consent is a change to the data type (update the study).</p>
+      <p id="q-study" class="muted">Create the study (or load one above) to publish questionnaires.</p>
+      <div id="q-list"></div>
+      <div class="row">
+        <button id="btn-q-new" class="secondary" disabled>+ New questionnaire</button>
+        <button id="btn-q-reload" class="secondary" disabled>Reload</button>
+        <span id="q-list-result" class="result"></span>
+      </div>
+
+      <div id="q-editor" class="form hidden">
+        <div class="grid2">
+          <label>Id <small>(kebab-case, fixed once published)</small> <input id="q-id" placeholder="daily-check-in"></label>
+          <label>Data type <small>(what participants consented to)</small> <select id="q-datatype"></select></label>
+        </div>
+        <div class="grid2">
+          <label>Title <input id="q-title" placeholder="Daily check-in"></label>
+          <label>Card text <small>(optional)</small> <input id="q-description" placeholder="Takes about a minute"></label>
+        </div>
+        <label>Introduction <small>(optional, above the questions)</small>
+          <textarea id="q-intro" rows="2" placeholder="Four short questions about today."></textarea></label>
+        <label>Questions <small>(the first one is the headline value on the home card and chart —
+          make it a scale or number)</small></label>
+        <div id="q-items"></div>
+        <button id="btn-q-add-item" class="secondary">+ Question</button>
+        <details class="card"><summary>Preview definition</summary><pre id="q-preview"></pre></details>
+        <div class="row">
+          <button id="btn-q-publish">Sign &amp; publish</button>
+          <button id="btn-q-cancel" class="secondary">Close editor</button>
+          <span id="q-result" class="result"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav"><button class="back" data-next="2">← Back</button>
+      <button class="next" data-next="4">Continue →</button></div>
+  </section>
+
+  <!-- ============================== STEP 4 ============================== -->
+  <section class="step hidden" id="step-4">
+    <h2>4 · Build the app with an AI agent</h2>
+    <p>Describe what makes your app yours. The wizard turns this — plus
+       everything from the previous steps — into a brief the agent follows.</p>
+    <figure><img src="img/agent-flow.svg" alt="Your answers become AGENT_BRIEF.md, which your AI coding agent uses to fill the template app's stubs"></figure>
+
+    <div class="form">
+      <div class="grid2">
+        <label>App name <input id="app-name" placeholder="SleepTrack"></label>
+        <label>Package id <input id="package-id" placeholder="org.myuni.sleepstudy"></label>
+      </div>
+      <label>App folder <small>(optional — where the agent creates the app: its own project, using the
+        published library. Empty = next to this repository, e.g. <code>../sleeptrack-app</code>)</small>
+        <input id="app-folder" placeholder="../sleeptrack-app"></label>
+      <label>How is data collected?</label>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="collection-mode" value="PASSIVE_CONNECTED_DEVICE" checked>
+          <b>Passive — connected device</b>
+          <small>Default. Continuous background collection from a wearable (Bluetooth / Wi-Fi). Starts after
+            consent and after reboot; no collection button for participants.</small></label>
+        <label class="choice"><input type="radio" name="collection-mode" value="PASSIVE_HEALTH">
+          <b>Passive — body sensors</b>
+          <small>Continuous background collection from the phone's or body sensors (needs body-sensor or
+            activity-recognition permission).</small></label>
+        <label class="choice"><input type="radio" name="collection-mode" value="SESSION">
+          <b>Sessions</b>
+          <small>Collection runs only between Start and Stop on the collection screen — e.g. a lab session
+            while stimuli are shown. Android limits it to ~6 h per day.</small></label>
+      </div>
+      <label class="checkline"><input type="checkbox" id="collection-screen-release">
+        Keep the collection screen in the release app <small>(passive modes only — by default it is there
+        for testing in debug builds, e.g. with CSV replay, and disappears from the release build)</small></label>
+      <label>Your sensor / device
+        <textarea id="sensor-desc" rows="4"
+          placeholder="e.g. Polar H10 chest strap over Bluetooth LE — heart rate and RR intervals via the standard Heart Rate service. Or: no device yet, keep simulated data."></textarea></label>
+      <label>Screens to customise <small>(optional)</small>
+        <textarea id="screen-notes" rows="3"
+          placeholder="e.g. Home screen should show a big sleep-score number and tonight's recording button. University colours: dark blue / white."></textarea></label>
+      <label>Health Connect import <small>(optional)</small>
+        <textarea id="hc-notes" rows="2"
+          placeholder="e.g. Let participants import their existing heart-rate and sleep history."></textarea></label>
+    </div>
+
+    <div class="row">
+      <button id="btn-brief">Generate agent brief</button>
+      <span id="brief-result" class="result"></span>
+    </div>
+
+    <div id="agent-box" class="card hidden">
+      <h3>Hand off to the agent</h3>
+      <p>The brief was written to <code id="brief-path"></code>. Any coding agent
+         can build the app — it reads <code>AGENTS.md</code> for the rules.
+         Start it in the repo root:</p>
+      <label>Agent <select id="agent-select"></select></label>
+      <pre id="agent-cmd"></pre>
+      <div class="row">
+        <button class="copy" data-copy="agent-cmd" id="btn-copy-agent">Copy command</button>
+        <button id="btn-launch" class="hidden">Launch</button>
+        <span id="launch-result" class="result"></span>
+      </div>
+    </div>
+
+    <div class="nav"><button class="back" data-next="3">← Back</button><span></span></div>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

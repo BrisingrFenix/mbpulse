@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Recovery credentials (onboarding) -->
+    <string name="mbpulse_passphrase_title">Create a recovery username and passphrase</string>
+    <string name="mbpulse_passphrase_intro">If you lose your device, your username and passphrase let you recover your data. Choose a unique username and a strong passphrase. We cannot recover them for you.</string>
+    <string name="mbpulse_username">Username</string>
+    <string name="mbpulse_passphrase">Passphrase</string>
+    <string name="mbpulse_passphrase_confirm">Confirm passphrase</string>
+    <string name="mbpulse_passphrase_username_hint">Tap Continue to check availability</string>
+    <string name="mbpulse_passphrase_username_taken">Username already taken.</string>
+    <string name="mbpulse_passphrase_username_taken_back">That username is already taken — go back and choose another.</string>
+    <string name="mbpulse_passphrase_weak">Too short or simple</string>
+    <string name="mbpulse_passphrase_fair">Fair — consider adding symbols</string>
+    <string name="mbpulse_passphrase_strong">Strong</string>
+    <string name="mbpulse_passphrase_mismatch">Passphrases do not match</string>
+    <string name="mbpulse_passphrase_saving">Saving your data securely…</string>
+    <string name="mbpulse_something_went_wrong">Something went wrong</string>
+    <string name="mbpulse_enrolment_failed">Enrolment failed. Please check your connection and try again.</string>
+    <string name="mbpulse_enrolment_study_closed">This study is no longer taking new participants, so you cannot join it.</string>
+    <string name="mbpulse_enrolment_join_code_again">Your join code has expired. Go back to the study list and enter it again.</string>
+</resources>

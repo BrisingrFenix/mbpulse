@@ -1,0 +1,182 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
+
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("maven-publish")
+}
+
+// The version study apps pin. A release version is only ever published from
+// committed code (checked below), so "1.0.0" always means the same code; work
+// in progress publishes as <releaseVersion>-SNAPSHOT with -Pmbpulse.snapshot.
+// The setup wizard reads `releaseVersion` for the agent brief.
+def releaseVersion = "1.0.0"
+group   = "pt.ua.mbpulse"
+version = providers.gradleProperty("mbpulse.snapshot").isPresent() ? "${releaseVersion}-SNAPSHOT" : releaseVersion
+
+android {
+    namespace = "pt.ua.mbpulse"
+    compileSdk = 36
+
+    defaultConfig {
+        minSdk = 26
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        // Applied to host apps that minify (R8) — see the file for what it keeps.
+        consumerProguardFiles("consumer-rules.pro")
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
+    }
+
+    // The published artifact: the release AAR plus its sources (read by
+    // agents and IDEs in host projects that use the library from Maven).
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+
+// pt.ua.mbpulse:mbpulse:<version>
+//   .\gradlew.bat :mbpulse:publishToMavenLocal                       (release, from committed code)
+//   .\gradlew.bat :mbpulse:publishToMavenLocal "-Pmbpulse.snapshot"  (<version>-SNAPSHOT, any state)
+// sample-app in this repository keeps using project(":mbpulse").
+
+/** Output of `git <args>` run in this module's folder ("" when git fails). */
+def gitOutput = { List<String> args ->
+    providers.exec {
+        commandLine(["git"] + args)
+        workingDir = projectDir
+        ignoreExitValue = true
+    }.standardOutput.asText.map { it.trim() }
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId    = "pt.ua.mbpulse"
+            artifactId = "mbpulse"
+            version    = project.version
+            afterEvaluate { from components.release }
+            pom {
+                name        = "mbPulse library"
+                description = "End-to-end-encrypted clinical data collection for Android: consent, encryption, storage, sync and UI."
+                // The commit this artifact was built from (with "-dirty" for a
+                // snapshot of uncommitted changes) — what "1.0.0" actually is.
+                properties.put("gitCommit", gitOutput(["rev-parse", "HEAD"]).map { commit ->
+                    def dirty = !gitOutput(["status", "--porcelain", "--", "."]).get().isEmpty()
+                    commit + (dirty ? "-dirty" : "")
+                })
+            }
+        }
+    }
+}
+
+// A release version must be reproducible: built from committed library code,
+// and never re-published from a different commit (study apps that pinned it
+// would silently get other code). Snapshots skip both checks.
+tasks.withType(PublishToMavenLocal).configureEach {
+    doFirst {
+        if (project.version.toString().endsWith("-SNAPSHOT")) return
+        def head = gitOutput(["rev-parse", "HEAD"]).get()
+        if (head.isEmpty()) {
+            throw new GradleException("Publishing release ${project.version} needs git (to record the commit) — " +
+                "or publish a snapshot: \"-Pmbpulse.snapshot\"")
+        }
+        if (!gitOutput(["status", "--porcelain", "--", "."]).get().isEmpty()) {
+            throw new GradleException("mbpulse/ has uncommitted changes, so it cannot be published as release " +
+                "${project.version} (that version must always mean the same code). Commit them first, or publish a " +
+                "snapshot for testing: \"-Pmbpulse.snapshot\" (→ ${project.version}-SNAPSHOT).")
+        }
+        def m2 = System.getProperty("maven.repo.local") ?: "${System.getProperty("user.home")}/.m2/repository"
+        def pom = new File(m2, "pt/ua/mbpulse/mbpulse/${project.version}/mbpulse-${project.version}.pom")
+        def published = pom.exists() ? (pom.text =~ /<gitCommit>([^<]+)<\/gitCommit>/) : null
+        if (published && published[0][1] != head) {
+            throw new GradleException("Release ${project.version} is already published from commit ${published[0][1]}; " +
+                "this is ${head}. Raise releaseVersion in mbpulse/build.gradle for a new release.")
+        }
+    }
+}
+
+kotlin {
+    // Every public declaration must say public (and its type): the published
+    // API is deliberate, and a declaration cannot become API by accident.
+    explicitApi()
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_11)
+    }
+}
+
+// Room writes each database version's schema here (AppDatabase exportSchema);
+// committed, and read by the migration tests.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+dependencies {
+    // api = types that appear in the public API (a published library passes
+    // these to the host's compile classpath; implementation ones it does not):
+    // Flow (SensorSource), composables + slot types (MbPulseApp/MbPulseNavHost),
+    // ColorScheme/Typography/Shapes (MbPulseBranding), Health Connect records.
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+    api(platform(libs.androidx.compose.bom))
+    api(libs.androidx.compose.runtime)
+    api(libs.androidx.compose.ui)
+    api(libs.androidx.compose.material3)
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    api(libs.androidx.health.connect.client)
+    implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
+
+    implementation(libs.postgrest.kt)
+    implementation(libs.auth.kt)
+    implementation(libs.storage.kt)
+    implementation(libs.realtime.kt)
+    implementation(libs.functions.kt)
+    implementation(libs.ktor.client.okhttp)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
+
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.sqlcipher.android)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.work.runtime.ktx)
+    // LogInitializer (logging/Log.kt) — same version WorkManager already brings.
+    implementation("androidx.startup:startup-runtime:1.2.0")
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+    implementation(libs.compose.m3)
+
+    testImplementation(libs.junit)
+    // AppDatabaseMigrationTest: real SQLite on the JVM (no device needed).
+    testImplementation("org.xerial:sqlite-jdbc:3.46.1.0")
+
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation("androidx.test:runner:1.6.2")
+}

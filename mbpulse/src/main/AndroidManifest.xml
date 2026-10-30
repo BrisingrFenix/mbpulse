@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Reconnect when a network appears after an offline start (LoadingViewModel). Normal permission. -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- One per collection mode (MbPulseConfig.collectionMode). Google Play asks
+         you to justify every foreground-service type an app declares: in the
+         release app, remove the ones your mode does not use, e.g.
+         <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH"
+             tools:node="remove" />                                          -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <!-- Passive modes resume collection after a reboot / app update. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Device-selection step (MbPulseConfig.deviceSelection) uses the Companion
+         Device Manager; not required, so apps without the step install anywhere. -->
+    <uses-feature android:name="android.software.companion_device_setup" android:required="false" />
+
+    <application>
+        <!-- Started as the type of the configured CollectionMode:
+             PASSIVE_CONNECTED_DEVICE → connectedDevice, PASSIVE_HEALTH → health,
+             SESSION → dataSync. The runtime prerequisite for connectedDevice /
+             health (e.g. BLUETOOTH_CONNECT, BODY_SENSORS) is declared by the host
+             app, which knows its sensor. -->
+        <service
+            android:name="pt.ua.mbpulse.collection.CollectionService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice|health|dataSync" />
+
+        <receiver
+            android:name="pt.ua.mbpulse.collection.CollectionBootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Debug/info logging only in debuggable host builds (logging/Log.kt).
+             Merged into the androidx.startup provider WorkManager already brings;
+             a host that removes WorkManagerInitializer keeps this one. -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="pt.ua.mbpulse.logging.LogInitializer"
+                android:value="androidx.startup" />
+        </provider>
+    </application>
+
+</manifest>

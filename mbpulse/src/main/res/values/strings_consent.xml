@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Consent flow. This is ethics-reviewed wording: when a study's approved
+      information differs, override these strings in the host app (same name)
+      rather than editing the library.
+    -->
+    <string name="mbpulse_consent_title">Study consent</string>
+    <string name="mbpulse_consent_decline_participation">Decline to participate</string>
+    <string name="mbpulse_consent_what_next">What happens next</string>
+    <plurals name="mbpulse_consent_bullet_categories">
+        <item quantity="one">You will be shown %d data category.</item>
+        <item quantity="other">You will be shown %d data categories individually.</item>
+    </plurals>
+    <string name="mbpulse_consent_bullet_choice">For each category you can accept or decline, and you will see exactly what is collected and why.</string>
+    <string name="mbpulse_consent_bullet_essential">Some categories are essential to the study. Declining them will end participation.</string>
+    <string name="mbpulse_consent_bullet_recorded">Your choices are recorded with a timestamp and stored securely.</string>
+    <string name="mbpulse_consent_rights">Your rights</string>
+    <string name="mbpulse_consent_right_withdraw">You may withdraw at any time without penalty.</string>
+    <string name="mbpulse_consent_right_deletion">On withdrawal, all your data will be deleted from the study servers.</string>
+    <string name="mbpulse_consent_right_access">Under GDPR Article 15 you may request a copy of all data held about you.</string>
+    <string name="mbpulse_consent_review_categories">Review data categories</string>
+    <string name="mbpulse_consent_category_progress">Data category %1$d of %2$d</string>
+    <string name="mbpulse_consent_required">Required</string>
+    <string name="mbpulse_consent_what">What we collect</string>
+    <string name="mbpulse_consent_why">Why we collect it</string>
+    <string name="mbpulse_consent_retention">Retention period</string>
+    <plurals name="mbpulse_consent_retention_body">
+        <item quantity="one">Each reading is deleted from the study server %d day after it is recorded, or immediately if you withdraw.</item>
+        <item quantity="other">Each reading is deleted from the study server %d days after it is recorded, or immediately if you withdraw.</item>
+    </plurals>
+    <string name="mbpulse_consent_sampling">How often it is recorded</string>
+    <plurals name="mbpulse_consent_sampling_hours">
+        <item quantity="one">At most one reading every hour.</item>
+        <item quantity="other">At most one reading every %d hours.</item>
+    </plurals>
+    <plurals name="mbpulse_consent_sampling_minutes">
+        <item quantity="one">At most one reading every minute.</item>
+        <item quantity="other">At most one reading every %d minutes.</item>
+    </plurals>
+    <plurals name="mbpulse_consent_sampling_seconds">
+        <item quantity="one">At most one reading every second.</item>
+        <item quantity="other">At most one reading every %d seconds.</item>
+    </plurals>
+    <string name="mbpulse_consent_essential_warning">This category is essential. Declining will end your participation in the study.</string>
+    <string name="mbpulse_consent_decline">Decline</string>
+    <string name="mbpulse_consent_accept">Accept</string>
+    <string name="mbpulse_consent_required_title">This category is required</string>
+    <string name="mbpulse_consent_required_text">\"%1$s\" is essential to the study\'s research question. Without it the study cannot include your data.\n\nYou can go back and reconsider, or withdraw from the study now. Withdrawal is without penalty and all data collected so far will be deleted.</string>
+    <string name="mbpulse_consent_reconsider">Go back and reconsider</string>
+    <string name="mbpulse_consent_summary_title">Review your choices</string>
+    <string name="mbpulse_consent_summary_intro">Please confirm your consent decisions. These will be recorded with a timestamp and stored securely.</string>
+    <string name="mbpulse_consent_confirm">Confirm and submit</string>
+    <string name="mbpulse_consent_accepted">Accepted</string>
+    <string name="mbpulse_consent_declined">Declined</string>
+
+    <!-- Consent review after a study update -->
+    <string name="mbpulse_reconsent_title">The study has changed</string>
+    <string name="mbpulse_reconsent_intro">The research team has updated this study. Please review the following before it is collected:</string>
+    <string name="mbpulse_reconsent_added">• New: %1$s</string>
+    <string name="mbpulse_reconsent_added_required">• New: %1$s (required)</string>
+    <string name="mbpulse_reconsent_changed">• Changed: %1$s — %2$s</string>
+    <string name="mbpulse_reconsent_removed">No longer collected: %1$s.</string>
+    <string name="mbpulse_reconsent_meanwhile">Until you decide, only data you already agreed to, under unchanged terms, is collected.</string>
+    <string name="mbpulse_reconsent_change_name">name</string>
+    <string name="mbpulse_reconsent_change_description">what is collected</string>
+    <string name="mbpulse_reconsent_change_purpose">why it is collected</string>
+    <string name="mbpulse_reconsent_change_retention">retention: %1$d → %2$d days</string>
+    <string name="mbpulse_reconsent_change_sampling">how often it is recorded</string>
+    <string name="mbpulse_reconsent_change_required">now required</string>
+    <string name="mbpulse_reconsent_change_optional">now optional</string>
+    <string name="mbpulse_reconsent_saving">Saving your choices…</string>
+    <string name="mbpulse_reconsent_failed">Could not save your choices. Check your connection and try again.</string>
+</resources>

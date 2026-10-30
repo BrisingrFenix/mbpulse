@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Study selection -->
+    <string name="mbpulse_studies_title">Select a study</string>
+    <string name="mbpulse_studies_intro">Choose the study you were invited to participate in.</string>
+    <string name="mbpulse_studies_failed">Could not load studies</string>
+    <string name="mbpulse_studies_failed_detail">The list of studies could not be loaded. Check your internet connection and try again.</string>
+    <string name="mbpulse_studies_empty">No active studies available.</string>
+    <string name="mbpulse_studies_recover">Already enrolled? Recover your account</string>
+    <string name="mbpulse_studies_version">Version %1$s</string>
+    <string name="mbpulse_studies_unsupported">Not available in this app</string>
+
+    <!-- Join code -->
+    <string name="mbpulse_join_code_prompt">This study requires a join code provided by your research team.</string>
+    <string name="mbpulse_join_code_label">Join code</string>
+    <string name="mbpulse_join">Join</string>
+    <string name="mbpulse_join_code_required">Requires join code</string>
+    <string name="mbpulse_join_code_incorrect">Incorrect join code.</string>
+    <string name="mbpulse_join_code_failed">The join code could not be checked.</string>
+    <string name="mbpulse_join_study_closed">This study is no longer taking new participants.</string>
+</resources>

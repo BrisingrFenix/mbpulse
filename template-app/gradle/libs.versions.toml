@@ -1,0 +1,50 @@
+# Versions for this study app. The mbPulse library is a pinned Maven artifact
+# (pt.ua.mbpulse:mbpulse) — bump "mbpulse" deliberately:
+# a new library version can need a newer backend (it says so on the loading
+# screen; see the library's CHANGELOG).
+#
+# Keep agp, kotlin, ksp and hilt at the versions the library was built with:
+# Hilt's generated code in the library must match the Hilt compiler that runs
+# here. In the mbPulse repository, agp/kotlin/hilt are in
+# gradle/libs.versions.toml, and the ksp and Hilt *plugin* versions in the
+# root build.gradle.kts (`id("com.google.devtools.ksp") version …`).
+[versions]
+mbpulse = "1.0.0"
+agp = "9.1.1"
+kotlin = "2.3.20"
+ksp = "2.3.2"
+hilt = "2.59.2"
+androidxHilt = "1.3.0"
+coreKtx = "1.18.0"
+lifecycleRuntimeKtx = "2.10.0"
+activityCompose = "1.13.0"
+composeBom = "2026.03.01"
+materialIconsCore = "1.7.8"
+workRuntimeKtx = "2.11.2"
+# HandoffConformanceTest (src/test) only. kotlinxSerialization = the library's.
+junit = "4.13.2"
+kotlinxSerialization = "1.11.0"
+
+[libraries]
+mbpulse = { module = "pt.ua.mbpulse:mbpulse", version.ref = "mbpulse" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version.ref = "materialIconsCore" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHilt" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androidxHilt" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidxHilt" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+junit = { module = "junit:junit", version.ref = "junit" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

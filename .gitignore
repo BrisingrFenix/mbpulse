@@ -1,0 +1,29 @@
+*.iml
+.gradle
+/local.properties
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+setup.md
+/backend/keys
+.vscode/settings.json
+/template-app/build
+/template-app/.gradle
+/template-app/.kotlin
+/setup-wizard/build
+# VS Code / Eclipse Java build output
+/setup-wizard/bin
+bin/
+keys/
+*.pem
+*_pkcs8.der
+.idea
+docs/design/
+# Local only
+.kotlin/
+backend/study.json
+# Restricted PhysioNet data, see README
+sample-app/src/main/assets/dreamt_patient.csv

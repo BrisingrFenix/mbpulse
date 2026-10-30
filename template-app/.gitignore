@@ -1,0 +1,9 @@
+/build
+/.gradle
+/.kotlin
+/.idea
+*.iml
+.DS_Store
+/captures
+# SDK path and backend credentials — never commit
+local.properties

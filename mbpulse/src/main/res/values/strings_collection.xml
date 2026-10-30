@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Collection screen -->
+    <string name="mbpulse_collection_title">Data collection</string>
+    <string name="mbpulse_collection_intro_passive">Testing screen (debug builds). This app collects passively — collection starts by itself after onboarding; use Start/Stop here to exercise the pipeline, e.g. with CSV replay.</string>
+    <string name="mbpulse_collection_intro_session">Start a collection session, e.g. for the duration of a lab protocol, and stop it when done. Derived epochs are encrypted and queued for sync.</string>
+    <string name="mbpulse_collection_status">Status</string>
+    <string name="mbpulse_collection_epochs">Epochs processed</string>
+    <string name="mbpulse_collection_pending">Pending upload</string>
+    <string name="mbpulse_collection_synced">Synced</string>
+    <string name="mbpulse_collection_sync_now">Sync now (%1$d pending)</string>
+    <string name="mbpulse_collection_stop">Stop collection</string>
+    <string name="mbpulse_collection_start">Start collection</string>
+    <string name="mbpulse_collection_onboarding_first">Complete onboarding before starting collection.</string>
+
+    <!-- Collection stages -->
+    <string name="mbpulse_stage_idle">Idle</string>
+    <string name="mbpulse_stage_starting">Starting…</string>
+    <string name="mbpulse_stage_recording">Recording</string>
+    <plurals name="mbpulse_stage_reconnecting">
+        <item quantity="one">Reconnecting in %d second</item>
+        <item quantity="other">Reconnecting in %d seconds</item>
+    </plurals>
+    <plurals name="mbpulse_stage_complete">
+        <item quantity="one">Complete — %d epoch recorded</item>
+        <item quantity="other">Complete — %d epochs recorded</item>
+    </plurals>
+    <string name="mbpulse_stage_stopped">Stopped</string>
+    <string name="mbpulse_stage_error">Error</string>
+
+    <!-- Notifications -->
+    <string name="mbpulse_notification_collection_channel">Data collection</string>
+    <string name="mbpulse_notification_collection_title">Recording health data</string>
+    <string name="mbpulse_notification_collection_passive">Collecting data from your study device</string>
+    <string name="mbpulse_notification_collection_session">Collection session in progress</string>
+    <string name="mbpulse_notification_sync_channel">Data sync</string>
+    <string name="mbpulse_notification_sync_title">Syncing health data</string>
+</resources>

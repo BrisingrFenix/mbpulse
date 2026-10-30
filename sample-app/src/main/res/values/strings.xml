@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Clinical Tests</string>
+    <string name="page_title">Measurements</string>
+
+    <string name="body_mass">Body Mass Index</string>
+    <string name="body_mass_value">--</string>
+    <string name="body_mass_units">kg/m²</string>
+
+    <string name="glycemia">Glycemia</string>
+    <string name="glycemia_value">--</string>
+    <string name="glycemia_unit">mg/dl</string>
+
+    <string name="blood_pressure">Blood pressure</string>
+    <string name="blood_pressure_systolic">Systolic</string>
+    <string name="blood_pressure_systolic_value">--</string>
+    <string name="blood_pressure_systolic_unit">mmHg</string>
+    <string name="blood_pressure_diastolic">Diastolic</string>
+    <string name="blood_pressure_diastolic_value">--</string>
+    <string name="blood_pressure_diastolic_unit">mmHg</string>
+
+    <string name="heart_rate">Heart rate</string>
+    <string name="heart_rate_value">--</string>
+    <string name="heart_rate_unit">bpm</string>
+
+    <string name="cholesterol">Cholesterol</string>
+    <string name="cholesterol_value">--</string>
+    <string name="cholesterol_unit">bpm</string>
+
+
+</resources>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Home (measurements) screen -->
+    <string name="mbpulse_home_title">Measurements</string>
+    <string name="mbpulse_home_action_collection">Collection</string>
+    <string name="mbpulse_home_action_import">Import from Health Connect</string>
+    <string name="mbpulse_home_menu_collection">Collection screen</string>
+    <string name="mbpulse_home_menu_reset">Reset (debug build)</string>
+    <string name="mbpulse_home_menu_refresh">Refresh</string>
+    <string name="mbpulse_refresh_done">Up to date</string>
+    <string name="mbpulse_refresh_offline">Could not reach the server — showing the saved study details. Your data uploads when you are back online.</string>
+    <string name="mbpulse_refresh_failed">Could not refresh the study</string>
+
+    <!-- Study ended (library-owned screen) -->
+    <string name="mbpulse_study_ended_title">This study has ended</string>
+    <string name="mbpulse_study_ended_body">The research team ended this study on %1$s. Thank you for taking part. Nothing more is collected from this phone.</string>
+    <string name="mbpulse_study_ended_data">Data recorded before the end is still uploaded. The research team keeps it for the period you agreed to, then it is deleted. You can withdraw now to delete it straight away.</string>
+    <string name="mbpulse_study_ended_withdraw">Withdraw and delete my data</string>
+
+    <!-- Account recovered on another phone (device binding) -->
+    <string name="mbpulse_device_replaced_title">This account is now used on another device</string>
+    <string name="mbpulse_device_replaced_body">Your account was recovered on another phone. Only that phone can take part in the study now, so this one no longer records or sends anything.</string>
+    <string name="mbpulse_device_replaced_data">Readings recorded on this phone that were not uploaded yet cannot be sent any more. Everything already uploaded is safe and belongs to your account on the other phone.</string>
+    <string name="mbpulse_device_replaced_not_you">If you did not recover your account on another phone, contact the research team.</string>
+    <string name="mbpulse_device_replaced_remove">Remove from this phone</string>
+    <string name="mbpulse_home_onboarding_incomplete">Complete onboarding to start\ncollecting data.</string>
+    <string name="mbpulse_home_empty_passive">Waiting for the first reading from your device.\nIt appears here as soon as it is recorded.</string>
+    <string name="mbpulse_home_empty_session">Start a collection session to\nsee your data here.</string>
+
+    <!-- Measurement cards -->
+    <string name="mbpulse_card_no_data">No data yet</string>
+    <string name="mbpulse_card_last_reading">Last reading %1$s</string>
+    <string name="mbpulse_card_description_data">%1$s: %2$s %3$s, recorded %4$s</string>
+    <string name="mbpulse_card_description_stale">%1$s: %2$s %3$s, recorded %4$s, out of date</string>
+    <string name="mbpulse_card_description_empty">%1$s: no data yet</string>
+
+    <!-- Status panel -->
+    <string name="mbpulse_status_offline_title">Offline</string>
+    <string name="mbpulse_status_offline_detail">Using the study details saved %1$s. Your data stays on this phone and uploads when you are back online.</string>
+    <string name="mbpulse_status_not_recording">Not recording</string>
+    <string name="mbpulse_status_disconnected_title">Sensor disconnected</string>
+    <string name="mbpulse_status_disconnected_detail">%1$s. Keep the device nearby and switched on.</string>
+    <string name="mbpulse_status_reconnecting">Trying to reconnect…</string>
+    <string name="mbpulse_status_recording">Recording</string>
+    <plurals name="mbpulse_status_recording_epochs">
+        <item quantity="one">%d epoch since collection started</item>
+        <item quantity="other">%d epochs since collection started</item>
+    </plurals>
+    <string name="mbpulse_status_waiting_first">Waiting for the first data from the sensor</string>
+    <string name="mbpulse_status_passive_idle">Recording starts by itself when the app is set up — reopen the app if this persists.</string>
+    <string name="mbpulse_status_no_session">No session running</string>
+    <string name="mbpulse_status_no_session_detail">Start a session on the collection screen.</string>
+
+    <!-- Upload (sync) status -->
+    <plurals name="mbpulse_sync_uploading">
+        <item quantity="one">Uploading %1$d of %2$d epoch · %3$d%%</item>
+        <item quantity="other">Uploading %1$d of %2$d epochs · %3$d%%</item>
+    </plurals>
+    <string name="mbpulse_sync_all_uploaded">All data uploaded</string>
+    <plurals name="mbpulse_sync_waiting">
+        <item quantity="one">%d epoch waiting to upload</item>
+        <item quantity="other">%d epochs waiting to upload</item>
+    </plurals>
+    <string name="mbpulse_sync_last_full">Last full sync %1$s</string>
+    <string name="mbpulse_sync_never">Not synced yet</string>
+    <string name="mbpulse_sync_last_error">Last attempt: %1$s</string>
+    <string name="mbpulse_sync_now">Sync now</string>
+    <string name="mbpulse_sync_error_generic">Upload failed — will retry</string>
+    <string name="mbpulse_sync_error_not_signed_in">Not signed in yet — will retry</string>
+    <string name="mbpulse_sync_error_device_replaced">Your account is now used on another device</string>
+    <plurals name="mbpulse_sync_error_rejected">
+        <item quantity="one">%d record rejected by the server — will retry</item>
+        <item quantity="other">%d records rejected by the server — will retry</item>
+    </plurals>
+
+    <!-- Withdrawal -->
+    <string name="mbpulse_withdraw_menu">Withdraw from study</string>
+    <string name="mbpulse_withdraw_confirm_title">Withdraw from study?</string>
+    <string name="mbpulse_withdraw_confirm_text">This permanently deletes all your collected data and consent records for this study — on this device and on the server — and removes you from the study. This cannot be undone.</string>
+    <string name="mbpulse_withdraw_confirm_action">Withdraw &amp; delete</string>
+    <string name="mbpulse_withdraw_failed_title">Withdrawal failed</string>
+    <string name="mbpulse_withdraw_failed_default">Could not delete your data. Check your connection and try again.</string>
+    <string name="mbpulse_withdraw_done_title">Your data has been deleted</string>
+    <string name="mbpulse_withdraw_done_local">Your data was cleared from this device.</string>
+    <string name="mbpulse_withdraw_done_server">The research server confirmed and removed:</string>
+    <plurals name="mbpulse_withdraw_records">
+        <item quantity="one">• %d measurement record</item>
+        <item quantity="other">• %d measurement records</item>
+    </plurals>
+    <plurals name="mbpulse_withdraw_consents">
+        <item quantity="one">• %d consent record</item>
+        <item quantity="other">• %d consent records</item>
+    </plurals>
+    <plurals name="mbpulse_withdraw_enrolments">
+        <item quantity="one">• %d enrolment</item>
+        <item quantity="other">• %d enrolments</item>
+    </plurals>
+    <plurals name="mbpulse_withdraw_accounts">
+        <item quantity="one">• %d account</item>
+        <item quantity="other">• %d accounts</item>
+    </plurals>
+    <string name="mbpulse_withdraw_recheck_ok">Independently re-checked: 0 records remain on the server.</string>
+    <plurals name="mbpulse_withdraw_recheck_remaining">
+        <item quantity="one">Warning: %d record still found on re-check.</item>
+        <item quantity="other">Warning: %d records still found on re-check.</item>
+    </plurals>
+    <string name="mbpulse_withdraw_recheck_failed">Could not independently re-check the server.</string>
+    <string name="mbpulse_withdraw_signature_ok">✓ Receipt signature verified — this proof is authentic.</string>
+    <string name="mbpulse_withdraw_signature_failed">⚠ Receipt signature could not be verified.</string>
+    <string name="mbpulse_withdraw_receipt_id">Receipt %1$s</string>
+    <string name="mbpulse_withdraw_in_progress">Deleting your data…</string>
+
+    <!-- Data-export notice -->
+    <string name="mbpulse_export_notice_title">Your data was accessed</string>
+    <string name="mbpulse_export_notice_text">Your study data was accessed by the research team on %1$s.</string>
+</resources>

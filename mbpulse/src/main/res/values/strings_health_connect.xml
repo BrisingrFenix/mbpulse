@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Health Connect import screen -->
+    <string name="mbpulse_hc_title">Import from Health Connect</string>
+    <string name="mbpulse_hc_intro">Import your existing health history from Health Connect into this study. Imported data is tagged as externally sourced.</string>
+    <string name="mbpulse_hc_categories">Categories: %1$s</string>
+    <string name="mbpulse_hc_not_configured">This app build does not support importing from Health Connect.</string>
+    <string name="mbpulse_hc_unavailable">Health Connect is not available on this device.</string>
+    <string name="mbpulse_hc_onboarding_first">Complete onboarding before importing data.</string>
+    <string name="mbpulse_hc_allow">Allow Health Connect access</string>
+    <plurals name="mbpulse_hc_import_days">
+        <item quantity="one">Import last %d day</item>
+        <item quantity="other">Import last %d days</item>
+    </plurals>
+    <string name="mbpulse_hc_importing">Importing…</string>
+    <string name="mbpulse_hc_result_empty">No data found to import.</string>
+    <plurals name="mbpulse_hc_result_imported">
+        <item quantity="one">Imported %1$d reading across %2$d time windows.</item>
+        <item quantity="other">Imported %1$d readings across %2$d time windows.</item>
+    </plurals>
+    <string name="mbpulse_hc_permission_required">Health Connect permission is required.</string>
+    <string name="mbpulse_hc_result_failed">Import failed: %1$s</string>
+</resources>

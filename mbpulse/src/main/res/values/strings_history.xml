@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- History screen -->
+    <string name="mbpulse_history_range_day">24h</string>
+    <string name="mbpulse_history_range_week">7d</string>
+    <string name="mbpulse_history_range_month">30d</string>
+    <string name="mbpulse_history_range_all">All</string>
+    <string name="mbpulse_history_empty">No readings in this period</string>
+    <string name="mbpulse_history_empty_hint">Try a wider time range.</string>
+    <string name="mbpulse_history_averaged">Showing %1$s — choose a shorter range for every reading.</string>
+    <plurals name="mbpulse_history_minute_averages">
+        <item quantity="one">%d-minute averages</item>
+        <item quantity="other">%d-minute averages</item>
+    </plurals>
+    <string name="mbpulse_history_hourly_averages">hourly averages</string>
+    <plurals name="mbpulse_history_hour_averages">
+        <item quantity="one">%d-hour averages</item>
+        <item quantity="other">%d-hour averages</item>
+    </plurals>
+    <string name="mbpulse_history_daily_averages">daily averages</string>
+    <string name="mbpulse_history_weekly_averages">weekly averages</string>
+    <string name="mbpulse_history_events_per_hour">Events per hour</string>
+    <string name="mbpulse_history_events_per_day">Events per day</string>
+    <string name="mbpulse_history_share">Share of recorded time</string>
+    <string name="mbpulse_history_stat_latest">Latest</string>
+    <string name="mbpulse_history_stat_min">Min</string>
+    <string name="mbpulse_history_stat_mean">Mean</string>
+    <string name="mbpulse_history_stat_max">Max</string>
+    <string name="mbpulse_history_stat_events">Events</string>
+    <string name="mbpulse_history_stat_per_day">Per day</string>
+    <string name="mbpulse_history_stat_last">Last</string>
+    <plurals name="mbpulse_history_count">
+        <item quantity="one">%d reading · newest first</item>
+        <item quantity="other">%d readings · newest first</item>
+    </plurals>
+    <string name="mbpulse_history_above_average">above average</string>
+    <string name="mbpulse_history_below_average">below average</string>
+    <string name="mbpulse_today">Today</string>
+    <string name="mbpulse_yesterday">Yesterday</string>
+
+    <!-- Charts -->
+    <string name="mbpulse_chart_value">Value</string>
+    <string name="mbpulse_chart_tap_hint">Tap the chart to see values</string>
+    <string name="mbpulse_chart_description">Chart from %1$s to %2$s: values between %3$s and %4$s %5$s</string>
+    <string name="mbpulse_chart_timeline_description">Timeline of %1$s</string>
+    <plurals name="mbpulse_chart_events_description">
+        <item quantity="one">%1$d event, at most %2$d per bar</item>
+        <item quantity="other">%1$d events, at most %2$d per bar</item>
+    </plurals>
+</resources>

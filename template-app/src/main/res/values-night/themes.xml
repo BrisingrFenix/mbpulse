@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark window background in dark mode, so launch doesn't flash white. -->
+    <style name="Theme.Study" parent="android:Theme.Material.NoActionBar" />
+</resources>

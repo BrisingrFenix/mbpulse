@@ -1,0 +1,71 @@
+{
+  "studyName": "My Sleep Study",
+  "studyVersion": 1.0,
+  "isActive": true,
+
+  "joinCode": "CHANGE-ME",
+
+  "dataTypes": [
+    {
+      "id": "bvp_hr_ibi",
+      "name": "Heart Rate and HRV",
+      "description": "Heart rate and heart rate variability derived from the PPG sensor.",
+      "purpose": "Monitor cardiovascular activity during sleep.",
+      "retentionDays": 56,
+      "isEssential": true,
+      "samplingSeconds": 30
+    },
+    {
+      "id": "accelerometry",
+      "name": "Wrist Movement and Sleep Staging",
+      "description": "Triaxial accelerometry used to classify sleep and wake periods.",
+      "purpose": "Estimate sleep staging and body movement.",
+      "retentionDays": 56,
+      "isEssential": true,
+      "samplingSeconds": 30
+    },
+    {
+      "id": "skin_temperature",
+      "name": "Skin Temperature",
+      "description": "Wrist skin temperature recorded every five minutes.",
+      "purpose": "Monitor thermoregulation during sleep.",
+      "retentionDays": 56,
+      "isEssential": false,
+      "samplingSeconds": 300
+    },
+    {
+      "id": "eda",
+      "name": "Electrodermal Activity",
+      "description": "Skin conductance as a proxy for autonomic arousal.",
+      "purpose": "Detect sympathetic nervous system activity during sleep.",
+      "retentionDays": 56,
+      "isEssential": false
+    },
+    {
+      "id": "daily_check_in",
+      "name": "Daily Check-in",
+      "description": "A short questionnaire in the app, about once a day: how you feel, your mood and your sleep.",
+      "purpose": "Relate how you feel to your measured sleep.",
+      "retentionDays": 56,
+      "isEssential": false,
+      "samplingSeconds": 72000
+    },
+    {
+      "id": "symptom_log",
+      "name": "Symptom Log",
+      "description": "Symptoms you log yourself in the app (which symptom, how strong, optional notes), whenever they start.",
+      "purpose": "Relate symptoms to your measured sleep and heart rate.",
+      "retentionDays": 56,
+      "isEssential": false
+    }
+  ],
+
+  "schemaDataTypes": {
+    "omh:heart-rate": "bvp_hr_ibi",
+    "mbpulse:hrv": "bvp_hr_ibi",
+    "omh:sleep-episode": "accelerometry",
+    "omh:body-temperature": "skin_temperature",
+    "mbpulse:electrodermal-activity": "eda",
+    "mystudy:symptom-log": "symptom_log"
+  }
+}

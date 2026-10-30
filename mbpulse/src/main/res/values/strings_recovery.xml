@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Account recovery -->
+    <string name="mbpulse_recovery_title">Recover account</string>
+    <string name="mbpulse_recovery_heading">Recover your data</string>
+    <string name="mbpulse_recovery_intro">Enter the username and passphrase you created during enrolment. Your keys will be re-generated for this device and your data will be accessible again.</string>
+    <string name="mbpulse_recovery_action">Recover</string>
+    <string name="mbpulse_recovery_recovering">Recovering…</string>
+    <string name="mbpulse_recovery_step_sign_in">Signing in…</string>
+    <string name="mbpulse_recovery_step_decrypt">Decrypting recovery key…</string>
+    <string name="mbpulse_recovery_step_import">Importing your data…</string>
+    <string name="mbpulse_recovery_step_consent">Restoring your consent choices…</string>
+    <string name="mbpulse_recovery_wrong_credentials">Incorrect username or passphrase.</string>
+    <string name="mbpulse_recovery_no_enrolment">This account has no study enrolment to recover.</string>
+    <string name="mbpulse_recovery_wrong_passphrase">Incorrect passphrase.</string>
+    <string name="mbpulse_recovery_failed">Recovery failed. Please check your connection and credentials.</string>
+</resources>
